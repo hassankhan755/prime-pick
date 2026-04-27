@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prime Pick</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+<header>
+  Prime Pick
+  <button id="adminBtn">Admin</button>
+</header>
+
+<main class="container">
+  <section id="products"></section>
+
+  <section id="adminPanel" class="hidden">
+    <h2>Admin Panel</h2>
+
+    <input id="pass" type="password" placeholder="Admin Password"/>
+
+    <div id="formBox" class="hidden">
+      <input id="title" placeholder="Product Title"/>
+      <input id="price" placeholder="Price"/>
+      <input id="image" placeholder="Image URL"/>
+      <input id="link" placeholder="Buy Link"/>
+      <textarea id="desc" placeholder="Description"></textarea>
+
+      <button id="addBtn">Add Product</button>
+    </div>
+
+    <p id="msg"></p>
+  </section>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
