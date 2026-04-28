@@ -12,12 +12,12 @@
 <body>
 
 <header>
-  <div>
-    <img src="primelogo.jpeg" alt="Prime Pick " class="logo"/>
-  
+  <img src="primelogo.jpeg" alt="Prime Pick " class="logo"/>
   <h1>Prime Pick</h1>
+  <div class="header-actions">
+    <button id="adminBtn">Admin</button>
+    <button id="themeToggle">Light Mode</button>
   </div>
-  <button id="adminBtn">Admin</button>
 </header>
 
 <main class="container">
@@ -41,6 +41,17 @@
     <p id="msg"></p>
   </section>
 </main>
+
+<div id="confirmModal" class="confirm-modal hidden">
+  <div class="confirm-dialog">
+    <h3>Confirm Delete</h3>
+    <p id="confirmMessage">Are you sure you want to delete this product?</p>
+    <div class="confirm-actions">
+      <button id="confirmYes" class="confirm-yes">Yes, Delete</button>
+      <button id="confirmNo" class="confirm-no">No, Keep It</button>
+    </div>
+  </div>
+</div>
 
 <script type="module" src="script.js"></script>
 </body>
