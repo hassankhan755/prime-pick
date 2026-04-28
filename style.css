@@ -211,6 +211,10 @@ h1 {
   display: none;
 }
 
+.empty-message {
+  color: var(--text-color);
+}
+
 input, textarea {
   width: 100%;
   margin: 5px 0;

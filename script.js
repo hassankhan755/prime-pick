@@ -166,7 +166,7 @@ function editProduct(id, products) {
 function renderProducts(products) {
   if (!products.length) {
     productsContainer.innerHTML =
-      "<p style='color:#cbd5e1'>No products available yet.</p>";
+      "<p class='empty-message'>No products available yet.</p>";
     return;
   }
 
