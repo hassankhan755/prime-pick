@@ -11,12 +11,13 @@ import {
 
 // ================= FIREBASE CONFIG =================
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyDuZnPdVQ6TZecOCcKj32II7KWV8QjR8vE",
+  authDomain: "prime-pick-3624c.firebaseapp.com",
+  projectId: "prime-pick-3624c",
+  storageBucket: "prime-pick-3624c.firebasestorage.app",
+  messagingSenderId: "560944691683",
+  appId: "1:560944691683:web:fc60bc3a40df4b5a8608d6",
+  measurementId: "G-3Y007N3YEJ"
 };
 
 const app = initializeApp(firebaseConfig);
