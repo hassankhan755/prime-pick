@@ -4,13 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prime Pick</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
+  <meta name="p:domain_verify" content="f9c75a26a8ba26b15113785a489028ed"/>
 </head>
 
 <body>
 
 <header>
-  Prime Pick
+  <div>
+    <img src="primelogo.jpeg" alt="Prime Pick " class="logo"/>
+  
+  <h1>Prime Pick</h1>
+  </div>
   <button id="adminBtn">Admin</button>
 </header>
 
@@ -23,10 +29,10 @@
     <input id="pass" type="password" placeholder="Admin Password"/>
 
     <div id="formBox" class="hidden">
-      <input id="title" placeholder="Product Title"/>
-      <input id="price" placeholder="Price"/>
-      <input id="image" placeholder="Image URL"/>
-      <input id="link" placeholder="Buy Link"/>
+      <input id="title" placeholder="Product Title" />
+      <input id="price" type="number" step="0.01" min="0" placeholder="Price" />
+      <input id="image" type="url" placeholder="Image URL" />
+      <input id="link" type="url" placeholder="Buy Link" />
       <textarea id="desc" placeholder="Description"></textarea>
 
       <button id="addBtn">Add Product</button>

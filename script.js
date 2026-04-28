@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+﻿import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getFirestore,
   collection,
@@ -18,6 +18,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const LOCAL_STORAGE_KEY = "primePickProducts";
+
+const firebaseConfigured =
+  !firebaseConfig.apiKey.includes("YOUR_") &&
+  !firebaseConfig.projectId.includes("YOUR_") &&
+  !firebaseConfig.authDomain.includes("YOUR_") &&
+  !firebaseConfig.appId.includes("YOUR_");
+let firestoreEnabled = firebaseConfigured;
 
 // ================= ADMIN PASSWORD =================
 const ADMIN_PASSWORD = "PrimePick@2026";
@@ -28,96 +36,153 @@ const adminPanel = document.getElementById("adminPanel");
 const passInput = document.getElementById("pass");
 const formBox = document.getElementById("formBox");
 const msg = document.getElementById("msg");
-const addbtn = document.getElementById("addBtn")
-addBtn.onclick = console.log(" click detected")
+const addBtn = document.getElementById("addBtn");
+const productsContainer = document.getElementById("products");
+const titleInput = document.getElementById("title");
+const priceInput = document.getElementById("price");
+const imageInput = document.getElementById("image");
+const linkInput = document.getElementById("link");
+const descInput = document.getElementById("desc");
+
+function setStatus(text, color) {
+  msg.textContent = text;
+  msg.style.color = color;
+}
+
+function getLocalProducts() {
+  const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (!raw) return [];
+
+  try {
+    return JSON.parse(raw) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalProducts(products) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(products));
+}
+
+function renderProducts(products) {
+  if (!products.length) {
+    productsContainer.innerHTML =
+      "<p style='color:#cbd5e1'>No products available yet.</p>";
+    return;
+  }
+
+  productsContainer.innerHTML = products
+    .map(p => `
+      <div class="card">
+        <img src="${p.image}" alt="${p.title}" />
+        <h2>${p.title}</h2>
+        <p>${p.desc}</p>
+        <h3>Rs. ${p.price}</h3>
+        <a class="btn" href="${p.link}" target="_blank">Order Now</a>
+      </div>
+    `)
+    .join("");
+}
+
+async function loadProducts() {
+  let products = [];
+
+  if (firestoreEnabled) {
+    try {
+      const snap = await getDocs(collection(db, "products"));
+      snap.forEach(doc => products.push(doc.data()));
+    } catch (err) {
+      console.warn("Firestore load failed, falling back to localStorage", err);
+      firestoreEnabled = false;
+    }
+  }
+
+  if (!firestoreEnabled) {
+    products = getLocalProducts();
+  }
+
+  renderProducts(products);
+}
+
+async function saveProduct(product) {
+  if (firestoreEnabled) {
+    try {
+      await addDoc(collection(db, "products"), product);
+      return;
+    } catch (err) {
+      console.warn("Firestore add failed, using localStorage", err);
+      firestoreEnabled = false;
+    }
+  }
+
+  const saved = getLocalProducts();
+  saved.push(product);
+  saveLocalProducts(saved);
+}
 
 // ================= ADMIN TOGGLE =================
-adminBtn.onclick = () => {
+adminBtn.addEventListener("click", () => {
   adminPanel.classList.toggle("hidden");
-};
+});
 
 // ================= LOGIN CHECK =================
 passInput.addEventListener("input", () => {
   if (passInput.value === ADMIN_PASSWORD) {
     formBox.classList.remove("hidden");
-    msg.textContent = "Access Granted";
-    msg.style.color = "lightgreen";
+    setStatus("Access Granted", "lightgreen");
   } else {
     formBox.classList.add("hidden");
-    msg.textContent = "Wrong Password";
-    msg.style.color = "red";
+    setStatus("Wrong Password", "red");
   }
 });
 
-// ================= LOAD PRODUCTS =================
-async function loadProducts() {
-  try {
-    const snap = await getDocs(collection(db, "products"));
-
-    let html = "";
-
-    snap.forEach(doc => {
-      const p = doc.data();
-
-      html += `
-        <div class="card">
-          <img src="${p.image}" />
-          <h2>${p.title}</h2>
-          <p>${p.desc}</p>
-          <h3>Rs. ${p.price}</h3>
-          <a class="btn" href="${p.link}" target="_blank">Order Now</a>
-        </div>
-      `;
-    });
-
-    document.getElementById("products").innerHTML = html;
-
-  } catch (err) {
-    console.error("LOAD ERROR:", err);
-    document.getElementById("products").innerHTML =
-      "<p style='color:red'>Failed to load products (check Firebase)</p>";
+// ================= ADD PRODUCT =================
+addBtn.addEventListener("click", async () => {
+  if (formBox.classList.contains("hidden")) {
+    setStatus("Enter admin password first.", "orange");
+    return;
   }
-}
 
-// ================= ADD PRODUCT (DEBUG FIXED) =================
-document.getElementById("addBtn").onclick = async () => {
+  const product = {
+    title: titleInput.value.trim(),
+    price: priceInput.value.trim(),
+    image: imageInput.value.trim(),
+    link: linkInput.value.trim(),
+    desc: descInput.value.trim()
+  };
+
+  if (!product.title || !product.price || !product.image || !product.link) {
+    setStatus("Please fill all required fields.", "orange");
+    return;
+  }
+
+  if (Number.isNaN(Number(product.price)) || Number(product.price) < 0) {
+    setStatus("Price must be a valid positive number.", "orange");
+    return;
+  }
+
   try {
-    const product = {
-      title: document.getElementById("title").value,
-      price: document.getElementById("price").value,
-      image: document.getElementById("image").value,
-      link: document.getElementById("link").value,
-      desc: document.getElementById("desc").value
-    };
+    await saveProduct(product);
 
-    console.log("Adding product:", product);
+    setStatus(
+      firestoreEnabled
+        ? "Product added successfully."
+        : "Product saved locally. Configure Firebase to persist online.",
+      "lightgreen"
+    );
 
-    if (!product.title || !product.price || !product.image || !product.link) {
-      msg.textContent = "Please fill all required fields";
-      msg.style.color = "orange";
-      return;
-    }
+    titleInput.value = "";
+    priceInput.value = "";
+    imageInput.value = "";
+    linkInput.value = "";
+    descInput.value = "";
 
-    await addDoc(collection(db, "products"), product);
-
-    msg.textContent = "Product added successfully";
-    msg.style.color = "lightgreen";
-
-    // clear fields
-    document.getElementById("title").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("image").value = "";
-    document.getElementById("link").value = "";
-    document.getElementById("desc").value = "";
-
-    loadProducts();
-
+    await loadProducts();
   } catch (err) {
     console.error("ADD PRODUCT ERROR:", err);
-    msg.textContent = "Failed to add product (check console)";
-    msg.style.color = "red";
+    setStatus("Failed to add product (check console)", "red");
   }
-};
+});
 
 // ================= INIT =================
 loadProducts();
