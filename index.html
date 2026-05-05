@@ -3,56 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prime Pick</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <title>Prime Pick – Best Deals from AliExpress</title>
   <link rel="stylesheet" href="style.css"/>
-  <meta name="p:domain_verify" content="f9c75a26a8ba26b15113785a489028ed"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
 
-<header>
-  <img src="primelogo.jpeg" alt="Prime Pick " class="logo"/>
-  <h1>Prime Pick</h1>
-  <div class="header-actions">
-    <button id="adminBtn">Admin</button>
-    <button id="themeToggle">Light Mode</button>
-  </div>
-</header>
+  <!-- ADMIN PANEL (hidden) -->
+  <div id="adminOverlay" class="admin-overlay hidden">
+    <div class="admin-modal">
+      <div class="admin-header">
+        <span class="admin-logo">⚙️ Prime Pick Admin</span>
+        <button onclick="closeAdmin()" class="admin-close">✕</button>
+      </div>
 
-<main class="container">
-  <section id="products"></section>
+      <div id="adminLoginSection">
+        <h3>Enter Admin Password</h3>
+        <input type="password" id="adminPasswordInput" placeholder="Password..." />
+        <button onclick="checkAdminPassword()">Unlock</button>
+        <p id="adminError" class="admin-error hidden">❌ Wrong password!</p>
+      </div>
 
-  <section id="adminPanel" class="hidden">
-    <h2>Admin Panel</h2>
+      <div id="adminDashboard" class="hidden">
+        <h3>➕ Add / Edit Product</h3>
+        <input type="hidden" id="editProductId"/>
+        <input type="text" id="prodName" placeholder="Product Name"/>
+        <input type="text" id="prodPrice" placeholder="Price (e.g. $19.99)"/>
+        <input type="text" id="prodLink" placeholder="AliExpress Affiliate Link"/>
+        <input type="text" id="prodImage" placeholder="Product Image URL"/>
+        <select id="prodCategory">
+          <option value="featured">⭐ Featured (Hero)</option>
+          <option value="related">🔗 Related Products</option>
+        </select>
+        <textarea id="prodDesc" placeholder="Short product description..."></textarea>
+        <div class="admin-btn-row">
+          <button onclick="saveProduct()" id="saveBtn">💾 Save Product</button>
+          <button onclick="clearForm()" class="btn-secondary">🔄 Clear</button>
+        </div>
 
-    <input id="pass" type="password" placeholder="Admin Password"/>
-
-    <div id="formBox" class="hidden">
-      <input id="title" placeholder="Product Title" />
-      <input id="price" type="number" step="0.01" min="0" placeholder="Price" />
-      <input id="image" type="url" placeholder="Image URL" />
-      <input id="link" type="url" placeholder="Buy Link" />
-      <textarea id="desc" placeholder="Description"></textarea>
-
-      <button id="addBtn">Add Product</button>
+        <h3 style="margin-top:24px;">📦 All Products</h3>
+        <div id="adminProductList"></div>
+      </div>
     </div>
+  </div>
 
-    <p id="msg"></p>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">
+          <span class="logo-icon">🏆</span>
+          <div>
+            <span class="brand-name">Prime Pick</span>
+            <span class="brand-tagline">Curated • Quality • Deals</span>
+          </div>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="#featured">Featured</a>
+        <a href="#related">More Deals</a>
+        <a href="#why">Why Us</a>
+      </nav>
+      <div class="header-badge">🔥 Hot Deals</div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION – Featured Product -->
+  <section id="featured" class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-label">⭐ TODAY'S TOP PICK</div>
+      <div class="hero-product" id="heroProduct">
+        <!-- Dynamically filled -->
+        <div class="hero-img-wrap">
+          <img id="heroImg" src="" alt="Featured Product"/>
+          <div class="hero-badge-img">BEST DEAL</div>
+        </div>
+        <div class="hero-info">
+          <h1 id="heroName" class="hero-title">Loading...</h1>
+          <p id="heroDesc" class="hero-desc"></p>
+          <div class="hero-price-row">
+            <span id="heroPrice" class="hero-price"></span>
+            <span class="hero-shipping">✅ Free Shipping</span>
+          </div>
+          <div class="hero-features">
+            <span>🔒 Secure Purchase</span>
+            <span>⚡ Fast Delivery</span>
+            <span>💯 Quality Verified</span>
+          </div>
+          <a id="heroBtn" href="#" target="_blank" class="cta-btn">
+            🛒 Buy Now on AliExpress
+          </a>
+          <p class="affiliate-note">*Affiliate link – supports us at no extra cost to you</p>
+        </div>
+      </div>
+    </div>
   </section>
-</main>
 
-<div id="confirmModal" class="confirm-modal hidden">
-  <div class="confirm-dialog">
-    <h3>Confirm Delete</h3>
-    <p id="confirmMessage">Are you sure you want to delete this product?</p>
-    <div class="confirm-actions">
-      <button id="confirmYes" class="confirm-yes">Yes, Delete</button>
-      <button id="confirmNo" class="confirm-no">No, Keep It</button>
+  <!-- WHY BUY -->
+  <section id="why" class="why-section">
+    <div class="container">
+      <h2 class="section-title">Why Shop Through <span>Prime Pick?</span></h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <span class="why-icon">🔍</span>
+          <h4>Hand-Picked Products</h4>
+          <p>We test and verify every product before recommending it.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">💸</span>
+          <h4>Best Prices</h4>
+          <p>Direct from AliExpress – factory prices, no middleman.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🚚</span>
+          <h4>Global Shipping</h4>
+          <p>Ships worldwide. Track your order in real-time.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-icon">🛡️</span>
+          <h4>Buyer Protection</h4>
+          <p>AliExpress guarantees your money back if not satisfied.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED PRODUCTS -->
+  <section id="related" class="related-section">
+    <div class="container">
+      <h2 class="section-title">🔗 More Deals You'll Love</h2>
+      <div class="products-grid" id="relatedGrid">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🏆</span>
+        <span class="brand-name">Prime Pick</span>
+      </div>
+      <p class="footer-note">This site contains affiliate links. We may earn a commission when you purchase through our links, at no extra cost to you.</p>
+      <p class="footer-copy">© 2025 Prime Pick. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="confirmModal" class="confirm-modal hidden">
+    <div class="confirm-card">
+      <div class="confirm-title">Confirm Action</div>
+      <div id="confirmMessage" class="confirm-message">Are you sure?</div>
+      <div class="confirm-actions">
+        <button class="confirm-btn confirm-cancel" onclick="confirmNo()">Cancel</button>
+        <button class="confirm-btn confirm-accept" onclick="confirmYes()">Delete</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script type="module" src="script.js"></script>
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
