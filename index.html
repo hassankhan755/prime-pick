@@ -10,44 +10,6 @@
 </head>
 <body>
 
-  <!-- ADMIN PANEL (hidden) -->
-  <div id="adminOverlay" class="admin-overlay hidden">
-    <div class="admin-modal">
-      <div class="admin-header">
-        <span class="admin-logo">⚙️ Prime Pick Admin</span>
-        <button onclick="closeAdmin()" class="admin-close">✕</button>
-      </div>
-
-      <div id="adminLoginSection">
-        <h3>Enter Admin Password</h3>
-        <input type="password" id="adminPasswordInput" placeholder="Password..." />
-        <button onclick="checkAdminPassword()">Unlock</button>
-        <p id="adminError" class="admin-error hidden">❌ Wrong password!</p>
-      </div>
-
-      <div id="adminDashboard" class="hidden">
-        <h3>➕ Add / Edit Product</h3>
-        <input type="hidden" id="editProductId"/>
-        <input type="text" id="prodName" placeholder="Product Name"/>
-        <input type="text" id="prodPrice" placeholder="Price (e.g. $19.99)"/>
-        <input type="text" id="prodLink" placeholder="AliExpress Affiliate Link"/>
-        <input type="text" id="prodImage" placeholder="Product Image URL"/>
-        <select id="prodCategory">
-          <option value="featured">⭐ Featured (Hero)</option>
-          <option value="related">🔗 Related Products</option>
-        </select>
-        <textarea id="prodDesc" placeholder="Short product description..."></textarea>
-        <div class="admin-btn-row">
-          <button onclick="saveProduct()" id="saveBtn">💾 Save Product</button>
-          <button onclick="clearForm()" class="btn-secondary">🔄 Clear</button>
-        </div>
-
-        <h3 style="margin-top:24px;">📦 All Products</h3>
-        <div id="adminProductList"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- HEADER -->
   <header class="site-header">
     <div class="header-inner">
@@ -150,18 +112,6 @@
       <p class="footer-copy">© 2025 Prime Pick. All rights reserved.</p>
     </div>
   </footer>
-
-  <!-- CONFIRMATION MODAL -->
-  <div id="confirmModal" class="confirm-modal hidden">
-    <div class="confirm-card">
-      <div class="confirm-title">Confirm Action</div>
-      <div id="confirmMessage" class="confirm-message">Are you sure?</div>
-      <div class="confirm-actions">
-        <button class="confirm-btn confirm-cancel" onclick="confirmNo()">Cancel</button>
-        <button class="confirm-btn confirm-accept" onclick="confirmYes()">Delete</button>
-      </div>
-    </div>
-  </div>
 
   <!-- TOAST -->
   <div id="toast" class="toast hidden"></div>
