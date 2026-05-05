@@ -23,12 +23,13 @@ window.PRODUCTS = [
   },
   {
   id: 'prod3',
-  name: 'Ear Buds',
-  price: '$54.78',
+  name: 'Kenma Anime Earbuds – Premium Sound for True Fans',
+  price: '$54.78 🔥 49% OFF – Limited Time Deal',
   link: 'https://s.click.aliexpress.com/e/_c4oaf6ZN',
   image: 'https://ae-pic-a1.aliexpress-media.com/kf/S7ee3c36cf21b4010994522ce0f2f6c38z.jpg',
   category: 'related', // or 'featured'
-  desc: 'very nice earbuds'
+  desc: 'Anime lovers ke liye stylish earbuds with powerful HiFi sound & low latency gaming experience '
+  
 }
 ];
 
