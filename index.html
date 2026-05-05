@@ -9,6 +9,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDuZnPdVQ6TZecOCcKj32II7KWV8QjR8vE",
+    authDomain: "prime-pick-3624c.firebaseapp.com",
+    projectId: "prime-pick-3624c",
+    storageBucket: "prime-pick-3624c.firebasestorage.app",
+    messagingSenderId: "560944691683",
+    appId: "1:560944691683:web:fc60bc3a40df4b5a8608d6",
+    measurementId: "G-3Y007N3YEJ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Test data add
+  async function addData() {
+    await addDoc(collection(db, "users"), {
+      name: "Hassan",
+      age: 18
+    });
+    console.log("Data add ho gaya");
+  }
+
+  addData();
+</script>
 
   <!-- HEADER -->
   <header class="site-header">
@@ -17,7 +45,7 @@
         <div class="brand-logo">
           <span class="logo-icon">🏆</span>
           <div>
-            <span class="brand-name">Prime Pick</span>
+            <span class="brand-name">Prime--Pick</span>
             <span class="brand-tagline">Curated • Quality • Deals</span>
           </div>
         </div>
